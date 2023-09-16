@@ -1,60 +1,44 @@
 from tkinter import *
 from tkinter import messagebox
 
+window = Tk()
+window.title('Лабораторная работа № 9')
+window.config(bg='azure3')
+window.resizable(width=False, height=False)
 
-def on_closing():
-    if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
-        tk.destroy()
-
-def on_closing_2(this_window):
-    if messagebox.askokcancel("Закрытие 2 окна", "Хотите закрыть 2 окно?"):
-        print("Закрытие 2 окна - успешно!!!")
-        this_window.destroy()
+f = ('Times', 14)
 
 
-tk = Tk()
-tk.protocol("WM_DELETE_WINDOW", on_closing)
-tk.title("Мое приложение")
-tk.resizable(0, 0)
-tk.wm_attributes("-topmost", 1)
-# tk.iconbitmap("bomb-3175208_640.ico")
+def toggle_password():
+    if show_password_var.get():
+        password.config(show='')
+    else:
+        password.config(show='*')
 
-canvas = Canvas(tk, width=400, height=400, bg="red", highlightthickness=0)
-canvas.pack()
+def on_close():
+    if messagebox.askokcancel('Выход', 'Действительно хотите закрыть приложение?'):
+        window.quit()
 
-def start_window_1():
-    new_window_1 = Toplevel(tk)
-    new_window_1.title("Мое окно 1")
-    new_window_1.resizable(0, 0)
-    new_window_1.wm_attributes("-topmost", 1)
-    canvas_1 = Canvas(new_window_1, width=200, height=200, bg="yellow", highlightthickness=0)
-    canvas_1.pack()
-    canvas_1.create_rectangle(50, 50, 150, 150, fill="blue", outline="")
+window.protocol('WM_DELETE_WINDOW', on_close)
 
+left_frame = Frame(window, bd=2, bg='azure3', relief=SOLID, padx=10, pady=10)
 
-def start_window_2():
-    new_window_2 = Toplevel(tk)
-    new_window_2.title("Окно 2")
-    new_window_2.resizable(0, 0)
-    new_window_2.protocol("WM_DELETE_WINDOW", lambda this_window=new_window_2: on_closing_2(this_window))
-    canvas_2 = Canvas(new_window_2, width=200, height=200, bg="green", highlightthickness=0)
-    canvas_2.pack()
-    canvas_2.create_oval(50, 50, 150, 150, fill="darkgreen", outline="")
+Label(left_frame, text="Введите логин", bg='azure3', font=f).grid(row=0, column=0, sticky=W, pady=10)
+Label(left_frame, text="Введите пароль", bg='azure3', font=f).grid(row=1, column=0, pady=10)
 
+name = Entry(left_frame, font=f)
+password = Entry(left_frame, font=f, show='*')
 
-b0 = Button(tk, text="Кнопка 1 окна", command=start_window_1)
-b0.place(x=100, y=100)
+name.grid(row=0, column=1, pady=10, padx=20)
+password.grid(row=1, column=1, pady=10, padx=20)
 
-b1 = Button(tk, text="Кнопка 2 окна", command=start_window_2)
-b1.place(x=200, y=200)
+show_password_var = BooleanVar()
+show_password_checkbox = Checkbutton(left_frame, text="Показать пароль", variable=show_password_var, bg='azure3', font=f, command=toggle_password)
+show_password_checkbox.grid(row=2, columnspan=2, pady=10, padx=20)
 
-# canvas.create_oval(100, 100, 300, 300, fill="yellow", outline="")
-# canvas.create_oval(120, 120, 280, 280, fill="white", outline="")
-#
-# canvas.create_rectangle(400,100,500,500, fill="lightgreen")
-# canvas.create_rectangle(420,120,480,480, fill="darkgreen", outline="")
-#
-# canvas.create_text(200,500,text="Hello World!", font=("Arial", 40),fill="white")
+login_btn = Button(left_frame, width=15, text='Войти', font=f, relief=SOLID, cursor='hand2', command=None)
+login_btn.grid(row=3, columnspan=2, pady=10)
 
+left_frame.pack()
 
-tk.mainloop()
+window.mainloop()
